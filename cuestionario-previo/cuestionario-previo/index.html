@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Cuestionario previo · Equipo UX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+<style>
+/* Layout: barra de app SISOC + tarjeta única por paso, stepper arriba, navegación abajo. Tokens: SISOC DS (Figma "Nuevo DS SISOC"). */
+:root{
+  --primary:#04756f; --primary-dark:#045f5b; --primary-light:#379f9b; --on-primary:#ffffff;
+  --primary-text:#045f5b; --primary-soft:rgba(4,117,111,.10);
+  --secondary:#ffc000; --secondary-text:#7a5c00;
+  --bg:#f5f5f4; --paper:#ffffff; --text:#1c1917; --text2:#57534e; --disabled:#a8a29e;
+  --divider:#e7e5e4; --outline:rgba(0,0,0,.23); --hover:rgba(0,0,0,.04); --selected:rgba(0,0,0,.08);
+  --nav:#045f5b; --nav-text:#fafaf9; --nav-muted:#d6d3d1;
+  --error:#c62828; --success:#1b5e20; --info:#01579b; --warning:#8a3a00;
+  --info-bg:rgba(1,105,159,.08); --warning-bg:rgba(237,108,2,.08); --success-bg:rgba(46,125,50,.08);
+  --shadow1:0 2px 1px -1px rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 1px 3px 0 rgba(0,0,0,.12);
+  --shadow4:0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
+  --font:'Roboto', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --mono:ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --r:4px; --r-md:8px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --primary:#379f9b; --primary-dark:#04756f; --primary-light:#54c4c0; --on-primary:#1c1917;
+  --primary-text:#54c4c0; --primary-soft:rgba(55,159,155,.18);
+  --secondary:#ffcd33; --secondary-text:#ffcd33;
+  --bg:#1c1917; --paper:#292524; --text:#fafaf9; --text2:#a8a29e; --disabled:#78716c;
+  --divider:#44403c; --outline:rgba(255,255,255,.23); --hover:rgba(255,255,255,.08); --selected:rgba(255,255,255,.16);
+  --nav:#073b38; --nav-text:#fafaf9; --nav-muted:#d6d3d1;
+  --error:#ef5350; --success:#79c57c; --info:#3dc1fd; --warning:#ffb74d;
+  --info-bg:rgba(3,169,244,.12); --warning-bg:rgba(255,152,0,.12); --success-bg:rgba(76,175,80,.12);
+  --shadow1:0 2px 1px -1px rgba(0,0,0,.5),0 1px 1px 0 rgba(0,0,0,.4),0 1px 3px 0 rgba(0,0,0,.36);
+  --shadow4:0 2px 4px -1px rgba(0,0,0,.5),0 4px 5px 0 rgba(0,0,0,.4),0 1px 10px 0 rgba(0,0,0,.36);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --primary:#379f9b; --primary-dark:#04756f; --primary-light:#54c4c0; --on-primary:#1c1917;
+  --primary-text:#54c4c0; --primary-soft:rgba(55,159,155,.18);
+  --secondary:#ffcd33; --secondary-text:#ffcd33;
+  --bg:#1c1917; --paper:#292524; --text:#fafaf9; --text2:#a8a29e; --disabled:#78716c;
+  --divider:#44403c; --outline:rgba(255,255,255,.23); --hover:rgba(255,255,255,.08); --selected:rgba(255,255,255,.16);
+  --nav:#073b38; --nav-text:#fafaf9; --nav-muted:#d6d3d1;
+  --error:#ef5350; --success:#79c57c; --info:#3dc1fd; --warning:#ffb74d;
+  --info-bg:rgba(3,169,244,.12); --warning-bg:rgba(255,152,0,.12); --success-bg:rgba(76,175,80,.12);
+  --shadow1:0 2px 1px -1px rgba(0,0,0,.5),0 1px 1px 0 rgba(0,0,0,.4),0 1px 3px 0 rgba(0,0,0,.36);
+  --shadow4:0 2px 4px -1px rgba(0,0,0,.5),0 4px 5px 0 rgba(0,0,0,.4),0 1px 10px 0 rgba(0,0,0,.36);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.5;letter-spacing:.009em}
+.appbar{background:var(--nav);color:var(--nav-text);padding:calc(14px + env(safe-area-inset-top,0px)) 16px 14px;box-shadow:var(--shadow4)}
+.appbar-in{max-width:880px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.appbar .mark{width:32px;height:32px;border-radius:var(--r);background:var(--secondary);color:#1c1917;display:grid;place-items:center;font-weight:700;font-size:14px;flex:none}
+.appbar h1{font-size:20px;font-weight:500;margin:0;letter-spacing:.0075em}
+.appbar .sub{color:var(--nav-muted);font-size:14px;margin-left:auto}
+main{max-width:880px;margin:0 auto;padding-inline:16px;padding-block:24px 48px;display:flex;flex-direction:column;gap:16px}
+.paper{background:var(--paper);border-radius:var(--r);box-shadow:var(--shadow1)}
+.intro{padding:20px 24px;display:flex;flex-direction:column;gap:8px}
+.intro h2{margin:0;font-size:24px;font-weight:400;text-wrap:balance}
+.intro p{margin:0;color:var(--text2);max-width:68ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.pill{font-size:13px;letter-spacing:.016em;padding:3px 10px;border-radius:999px;background:var(--primary-soft);color:var(--primary-text)}
+/* stepper */
+.stepper-wrap{padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+.progress{height:4px;border-radius:2px;background:var(--divider);overflow:hidden}
+.progress>i{display:block;height:100%;background:var(--primary);transition:width .25s}
+.steps{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
+.step{flex:none;display:flex;align-items:center;gap:8px;border:0;background:none;color:var(--text2);font:inherit;font-size:14px;padding:6px 10px 6px 6px;border-radius:999px;cursor:pointer}
+.step:hover{background:var(--hover)}
+.step:focus-visible{outline:2px solid var(--primary);outline-offset:1px}
+.step .n{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:500;background:var(--disabled);color:#fff}
+.step.done .n{background:var(--primary)}
+.step.cur{color:var(--text);font-weight:500;background:var(--primary-soft)}
+.step.cur .n{background:var(--primary);color:var(--on-primary)}
+.step.skip{opacity:.5}
+.step .lbl{white-space:nowrap}
+/* section card */
+.card{padding:24px;display:flex;flex-direction:column;gap:20px}
+.card-head{display:flex;flex-direction:column;gap:4px}
+.overline{font-size:12px;letter-spacing:.083em;text-transform:uppercase;color:var(--primary-text);font-weight:500}
+.card h3{margin:0;font-size:20px;font-weight:500;letter-spacing:.0075em;text-wrap:balance}
+.card .lead{margin:0;color:var(--text2);font-size:14px;max-width:68ch}
+.hu-tag{display:inline-block;margin-left:6px;font-size:12px;font-weight:500;padding:1px 8px;border-radius:999px;background:var(--secondary);color:#1c1917;vertical-align:2px;letter-spacing:.02em}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:640px){.grid2{grid-template-columns:1fr}.card{padding:20px 16px}.appbar .sub{margin-left:0;width:100%}}
+/* text field (MUI outlined) */
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label,.flabel{font-size:14px;font-weight:500;color:var(--text);letter-spacing:.007em}
+.req{color:var(--error);margin-left:2px}
+.field input,.field textarea,.field select{font:inherit;font-size:16px;color:var(--text);background:transparent;border:1px solid var(--outline);border-radius:var(--r);padding:12px 14px;width:100%;min-width:0}
+.field textarea{min-height:88px;resize:vertical;line-height:1.5}
+.field input:hover,.field textarea:hover,.field select:hover{border-color:var(--text)}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--primary);box-shadow:inset 0 0 0 1px var(--primary)}
+.field ::placeholder{color:var(--disabled)}
+.help{font-size:12px;color:var(--text2);letter-spacing:.033em;line-height:1.6}
+/* chips / radios */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:13px;letter-spacing:.012em;border:1px solid var(--outline);background:transparent;color:var(--text);padding:6px 14px;border-radius:16px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.chip:hover{background:var(--hover)}
+.chip:focus-visible{outline:2px solid var(--primary);outline-offset:1px}
+.chip[aria-pressed="true"],.chip[aria-checked="true"]{background:var(--primary-soft);border-color:var(--primary);color:var(--primary-text);font-weight:500}
+.chip[aria-pressed="true"]::before,.chip[aria-checked="true"]::before{content:"";width:14px;height:8px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg) translateY(-2px)}
+/* repeatable items */
+.items{display:flex;flex-direction:column;gap:16px}
+.item{border:1px solid var(--divider);border-radius:var(--r-md);padding:16px;display:flex;flex-direction:column;gap:16px;border-left:4px solid var(--primary)}
+.item-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.item-head strong{font-size:16px;font-weight:500}
+.hu-sentence{font-size:14px;color:var(--text2);background:var(--bg);border-radius:var(--r);padding:10px 12px;line-height:1.6}
+.hu-sentence b{color:var(--primary-text);font-weight:500}
+/* buttons */
+.btn{font:inherit;font-size:14px;font-weight:500;letter-spacing:.029em;text-transform:uppercase;border-radius:var(--r);padding:8px 22px;border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px}
+.btn:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.btn-c{background:var(--primary);color:var(--on-primary);box-shadow:var(--shadow1)}
+.btn-c:hover{background:var(--primary-dark);color:#fff}
+.btn-o{background:transparent;color:var(--primary-text);border:1px solid var(--primary)}
+.btn-o:hover{background:var(--primary-soft)}
+.btn-t{background:transparent;color:var(--primary-text);padding:8px 12px}
+.btn-t:hover{background:var(--primary-soft)}
+.btn-t.danger{color:var(--error)}
+.btn[disabled]{opacity:.45;cursor:default;box-shadow:none}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 24px;border-top:1px solid var(--divider)}
+.nav .saved{font-size:12px;color:var(--text2);letter-spacing:.033em}
+/* alerts */
+.alert{border-radius:var(--r);padding:12px 16px;font-size:14px;display:flex;gap:12px;align-items:flex-start;line-height:1.5}
+.alert .ic{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff}
+.alert.info{background:var(--info-bg);color:var(--text)} .alert.info .ic{background:var(--info)}
+.alert.warn{background:var(--warning-bg);color:var(--text)} .alert.warn .ic{background:var(--warning)}
+.alert.ok{background:var(--success-bg);color:var(--text)} .alert.ok .ic{background:var(--success)}
+.alert ul{margin:4px 0 0;padding-left:18px}
+.preview{font-family:var(--mono);font-size:13px;line-height:1.6;background:var(--bg);border:1px solid var(--divider);border-radius:var(--r);padding:16px;max-height:420px;overflow:auto;white-space:pre-wrap;word-break:break-word;margin:0}
+.actions{display:flex;flex-wrap:wrap;gap:12px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#323232;color:#fff;padding:12px 18px;border-radius:var(--r);font-size:14px;box-shadow:var(--shadow4);max-width:calc(100% - 32px)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<header class="appbar">
+  <div class="appbar-in">
+    <div class="mark" aria-hidden="true">UX</div>
+    <h1>Cuestionario previo</h1>
+    <span class="sub">Equipo UX · Análisis funcional y arquitectura de la información</span>
+  </div>
+</header>
+
+<main>
+  <section class="paper intro" aria-labelledby="intro-t">
+    <h2 id="intro-t">Contanos qué necesitan antes de la primera reunión</h2>
+    <p>Tus respuestas van a ser la guía de nuestra primera charla. No hace falta escribir perfecto ni completar todo: lo que falte lo vemos juntos en la reunión.</p>
+    <div class="meta"><span class="pill">15 a 20 minutos</span><span class="pill">9 pasos</span><span class="pill">Se guarda solo en este navegador</span></div>
+  </section>
+
+  <nav class="paper stepper-wrap" aria-label="Pasos del cuestionario">
+    <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+    <div class="steps" id="steps"></div>
+  </nav>
+
+  <section class="paper" id="panel" aria-live="polite">
+    <div class="card" id="card"></div>
+    <div class="nav">
+      <button class="btn btn-t" id="prev" type="button">Anterior</button>
+      <span class="saved" id="saved"></span>
+      <button class="btn btn-c" id="next" type="button">Siguiente</button>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+(function(){
+const KEY='cuestionario-previo-ux-v1';
+const blank=()=>({
+  organismo:'',area:'',referente:'',contacto:'',tipo:'',plataforma:'',sistemas:[],fecha:'',fechaMotivo:'',
+  problema:'',hoy:'',siNo:'',
+  perfiles:[{nombre:'',cantidad:'',dispositivo:'',conexion:'',manejo:'',notas:''}],
+  hus:[{como:'',quiero:'',para:'',importancia:'',criterio:''}],
+  cambio:'',senales:[],senalOtra:'',
+  datos:'',base:'',baseCual:'',acceso:'',sensibles:[],legal:'',legalDetalle:'',
+  bien:'',quejas:'',uso:'',accesoActual:'',
+  material:'',carpeta:'',links:''
+});
+let s=blank(), step=0;
+try{const raw=localStorage.getItem(KEY); if(raw){s=Object.assign(blank(),JSON.parse(raw));}}catch(e){}
+let savedAt=null;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(s));savedAt=new Date();showSaved();}catch(e){}}
+function showSaved(){const el=document.getElementById('saved'); if(savedAt){el.textContent='Borrador guardado '+savedAt.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});}}
+
+const STEPS=[
+  {t:'Sobre el proyecto',short:'Proyecto'},
+  {t:'El problema',short:'Problema'},
+  {t:'Quiénes la van a usar',short:'Quiénes',hu:'Como…'},
+  {t:'Qué necesitan hacer',short:'Qué hacen',hu:'Quiero… para…'},
+  {t:'Qué cambia si funciona',short:'Resultados'},
+  {t:'Datos y permisos',short:'Datos'},
+  {t:'Plataforma actual',short:'Si es mejora',onlyMejora:true},
+  {t:'Material para compartir',short:'Material'},
+  {t:'Revisar y enviar',short:'Enviar'}
+];
+const skip=i=>STEPS[i].onlyMejora && s.tipo!=='mejora';
+
+const esc=v=>String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function tf(k,label,o={}){
+  const id='f_'+k, v=esc(s[k]);
+  const lab=`<label for="${id}">${label}${o.req?'<span class="req" aria-hidden="true">*</span>':''}</label>`;
+  const help=o.help?`<span class="help" id="${id}_h">${o.help}</span>`:'';
+  const ph=o.ph?` placeholder="${esc(o.ph)}"`:'';
+  const ctl=o.multi?`<textarea id="${id}" data-k="${k}"${ph}${o.help?` aria-describedby="${id}_h"`:''}>${v}</textarea>`:`<input id="${id}" data-k="${k}" type="${o.type||'text'}" value="${v}"${ph}${o.help?` aria-describedby="${id}_h"`:''}>`;
+  return `<div class="field">${lab}${ctl}${help}</div>`;
+}
+function lf(list,i,f,label,o={}){
+  const id=`f_${list}_${i}_${f}`, v=esc(s[list][i][f]);
+  const ph=o.ph?` placeholder="${esc(o.ph)}"`:'';
+  const ctl=o.multi?`<textarea id="${id}" data-l="${list}" data-i="${i}" data-f="${f}"${ph}>${v}</textarea>`:`<input id="${id}" data-l="${list}" data-i="${i}" data-f="${f}" value="${v}"${ph}>`;
+  return `<div class="field"><label for="${id}">${label}${o.req?'<span class="req" aria-hidden="true">*</span>':''}</label>${ctl}${o.help?`<span class="help">${o.help}</span>`:''}</div>`;
+}
+function radio(k,label,opts,o={}){
+  const cur=s[k];
+  return `<div class="field" role="radiogroup" aria-label="${esc(label)}"><span class="flabel">${label}${o.req?'<span class="req" aria-hidden="true">*</span>':''}</span><div class="chips">${opts.map(([v,t])=>`<button type="button" class="chip" role="radio" aria-checked="${cur===v}" data-radio="${k}" data-v="${v}">${t}</button>`).join('')}</div>${o.help?`<span class="help">${o.help}</span>`:''}</div>`;
+}
+function lradio(list,i,f,label,opts){
+  const cur=s[list][i][f];
+  return `<div class="field" role="radiogroup" aria-label="${esc(label)}"><span class="flabel">${label}</span><div class="chips">${opts.map(t=>`<button type="button" class="chip" role="radio" aria-checked="${cur===t}" data-lradio="${list}" data-i="${i}" data-f="${f}" data-v="${esc(t)}">${t}</button>`).join('')}</div></div>`;
+}
+function multi(k,label,opts,o={}){
+  const cur=s[k]||[];
+  return `<div class="field"><span class="flabel">${label}</span><div class="chips" role="group" aria-label="${esc(label)}">${opts.map(t=>`<button type="button" class="chip" aria-pressed="${cur.includes(t)}" data-multi="${k}" data-v="${esc(t)}">${t}</button>`).join('')}</div>${o.help?`<span class="help">${o.help}</span>`:''}</div>`;
+}
+const head=(i,lead)=>`<div class="card-head"><span class="overline">Paso ${i+1} de ${STEPS.length}${STEPS[i].hu?`<span class="hu-tag">${STEPS[i].hu}</span>`:''}</span><h3>${STEPS[i].t}</h3>${lead?`<p class="lead">${lead}</p>`:''}</div>`;
+
+function huSentence(h){
+  const c=h.como||'[perfil]', q=h.quiero||'[qué necesita hacer]', p=h.para||'[para qué]';
+  return `<b>Como</b> ${esc(c)}, <b>quiero</b> ${esc(q)}, <b>para</b> ${esc(p)}.`;
+}
+
+const R=[
+ ()=>head(0,'Datos básicos para ubicar el pedido.')+
+   `<div class="grid2">${tf('organismo','Organismo',{req:1,ph:'Ej.: Secretaría de Niñez, Adolescencia y Familia'})}${tf('area','Área o dirección',{ph:'Ej.: Dirección de Centros de Familia'})}</div>`+
+   `<div class="grid2">${tf('referente','Persona referente',{ph:'Nombre y cargo'})}${tf('contacto','Correo de contacto',{type:'email',ph:'nombre@organismo.gob.ar'})}</div>`+
+   radio('tipo','¿Es una plataforma nueva o una mejora?',[['nueva','Plataforma nueva'],['mejora','Mejora de una existente'],['nose','Todavía no sabemos']],{req:1})+
+   (s.tipo==='mejora'?tf('plataforma','¿Qué plataforma se quiere mejorar?',{ph:'Nombre o link de la plataforma actual'}):'')+
+   multi('sistemas','¿Se relaciona con algún sistema?',['FCH · Formando Capital Humano (cursos y formación)','SIIS · Sistema Integrado de Información Social','SISOC · Gestión de programas sociales','Portal Empleo · Búsqueda de empleo y carga de CV','Otro sistema','Ninguno','No sé'],{help:'Podés elegir más de uno.'})+
+   `<div class="grid2">${tf('fecha','¿Hay una fecha que no se puede mover?',{type:'date'})}${tf('fechaMotivo','¿Por qué esa fecha?',{ph:'Ej.: abre la convocatoria, lo pide una norma'})}</div>`,
+ ()=>head(1,'Contalo como se lo contarías a alguien de afuera, sin términos técnicos.')+
+   tf('problema','¿Qué problema quieren resolver?',{req:1,multi:1,ph:'Ej.: muchas familias abandonan la inscripción porque no saben qué documentos presentar.'})+
+   tf('hoy','¿Cómo se resuelve hoy?',{multi:1,ph:'Ej.: con planillas de Excel que se mandan por mail, en papel, con otro sistema…'})+
+   tf('siNo','¿Qué pasa si no se resuelve?',{multi:1,ph:'Ej.: se pierden inscripciones, hay errores en los pagos, se sobrecarga la mesa de ayuda.'}),
+ ()=>head(2,'Cada tipo de persona que usaría la plataforma. Esto completa el “Como…” de cada historia de usuario.')+
+   `<div class="items">${s.perfiles.map((p,i)=>`<div class="item"><div class="item-head"><strong>Perfil ${i+1}</strong>${s.perfiles.length>1?`<button type="button" class="btn btn-t danger" data-del="perfiles" data-i="${i}">Quitar</button>`:''}</div>`+
+     `<div class="grid2">${lf('perfiles',i,'nombre','¿Quiénes son?',{req:1,ph:'Ej.: referentes de comedores'})}${lf('perfiles',i,'cantidad','¿Cuántas personas, más o menos?',{ph:'Ej.: 1.200 en todo el país'})}</div>`+
+     lradio('perfiles',i,'dispositivo','¿Desde dónde la usarían?',['Celular','Computadora','Las dos'])+
+     lradio('perfiles',i,'conexion','¿Cómo es su conexión a internet?',['Buena','Regular','Mala o sin conexión'])+
+     lradio('perfiles',i,'manejo','¿Qué tan cómodas se manejan con la tecnología?',['Mucho','Más o menos','Poco'])+
+     lf('perfiles',i,'notas','Algo más que tengamos que saber de este perfil',{multi:1,ph:'Ej.: trabajan en territorio, muchas personas no tienen DNI a mano.'})+`</div>`).join('')}</div>`+
+   `<div><button type="button" class="btn btn-o" data-add="perfiles">Agregar otro perfil</button></div>`,
+ ()=>head(3,'Las 3 a 5 cosas más importantes que cada perfil tiene que poder hacer. Cada una es una historia de usuario.')+
+   `<div class="alert info"><span class="ic" aria-hidden="true">i</span><span><b>Ejemplo:</b> Como <i>referente de comedor</i>, quiero <i>cargar la asistencia del día desde el celular</i>, para <i>no hacerlo en papel y después pasarlo</i>.</span></div>`+
+   `<datalist id="perfiles-dl">${s.perfiles.filter(p=>p.nombre).map(p=>`<option value="${esc(p.nombre)}">`).join('')}</datalist>`+
+   `<div class="items">${s.hus.map((h,i)=>`<div class="item"><div class="item-head"><strong>Historia ${i+1}</strong>${s.hus.length>1?`<button type="button" class="btn btn-t danger" data-del="hus" data-i="${i}">Quitar</button>`:''}</div>`+
+     `<div class="field"><label for="f_hus_${i}_como">Como…<span class="req" aria-hidden="true">*</span></label><input id="f_hus_${i}_como" list="perfiles-dl" data-l="hus" data-i="${i}" data-f="como" value="${esc(h.como)}" placeholder="¿Quién? Elegí un perfil o escribilo"></div>`+
+     lf('hus',i,'quiero','quiero…',{req:1,ph:'¿Qué necesita hacer?'})+
+     lf('hus',i,'para','para…',{ph:'¿Para qué? ¿Qué logra?'})+
+     `<div class="hu-sentence" data-sentence="${i}">${huSentence(h)}</div>`+
+     lradio('hus',i,'importancia','¿Qué tan importante es?',['Imprescindible','Importante','Deseable'])+
+     lf('hus',i,'criterio','¿Qué tendría que pasar para decir “esto funciona”?',{multi:1,ph:'Ej.: la carga se hace en menos de 2 minutos y queda registrada aunque no haya señal.',help:'Esto se convierte en las pruebas del sistema.'})+`</div>`).join('')}</div>`+
+   `<div><button type="button" class="btn btn-o" data-add="hus">Agregar otra historia</button></div>`,
+ ()=>head(4,'Cómo se darían cuenta de que la plataforma mejoró las cosas.')+
+   tf('cambio','¿Qué cambia si la plataforma funciona bien?',{multi:1,ph:'Ej.: las familias se inscriben solas y el equipo deja de cargar planillas.'})+
+   multi('senales','¿En qué lo notarían?',['Menos consultas','Más inscripciones completas','Menos tiempo de carga','Datos más confiables','Menos errores','Mejor seguimiento','Otro'])+
+   (s.senales.includes('Otro')?tf('senalOtra','¿Qué otra señal?',{}):''),
+ ()=>head(5,'Si no sabés alguna respuesta, elegí “No sé”: lo averiguamos juntos.')+
+   tf('datos','¿Qué datos se cargan o se consultan?',{multi:1,ph:'Ej.: datos personales de la persona inscripta, domicilio, grupo familiar, asistencia.'})+
+   radio('base','¿Esos datos ya existen en alguna base?',[['si','Sí'],['no','No'],['nose','No sé']])+
+   (s.base==='si'?tf('baseCual','¿Cuál es y quién la administra?',{ph:'Ej.: padrón del programa, lo administra la Dirección de Sistemas'}):'')+
+   radio('acceso','¿Tenemos acceso a esos datos?',[['si','Sí'],['pedir','Hay que pedirlo'],['nose','No sé']])+
+   multi('sensibles','¿Incluye alguno de estos datos?',['Datos personales','Salud','Situación social','Personas menores de edad','Ninguno','No sé'])+
+   radio('legal','¿Hace falta un convenio, autorización o auditoría legal?',[['si','Sí'],['no','No'],['nose','No sé']])+
+   (s.legal==='si'?tf('legalDetalle','Contanos cuál',{multi:1}):''),
+ ()=>head(6,'Solo si es una mejora: qué conviene mantener y qué cambiar.')+
+   tf('bien','¿Qué funciona bien hoy y no hay que tocar?',{multi:1})+
+   tf('quejas','¿Qué genera más quejas o consultas?',{multi:1})+
+   tf('uso','¿Tienen datos de uso o reclamos para compartir?',{multi:1,ph:'Ej.: cantidad de usuarios, consultas por mes, reportes de la mesa de ayuda.'})+
+   tf('accesoActual','¿Podemos acceder a la plataforma actual?',{ph:'Link y cómo pedir un usuario de prueba'}),
+ ()=>head(7,'Todo lo que nos ayude a entender el tema. Para que no se pierda nada, subí los archivos a una carpeta de Drive (o similar) y pegá acá el link.')+
+   tf('material','¿Qué material tienen?',{multi:1,ph:'Ej.: formularios actuales, planillas, normativa, manuales, capturas.'})+
+   tf('carpeta','Link a la carpeta compartida',{type:'url',ph:'https://drive.google.com/…',help:'Compartila con permiso de lector para quien te mandó este cuestionario. Si agregás archivos después, se suman solos a la misma carpeta.'})+
+   tf('links','Otros links útiles',{multi:1,ph:'Un link por línea. Ej.: normativa publicada, sistemas actuales o plataformas que les gusten.'}),
+ ()=>review()
+];
+
+function missing(){
+  const m=[];
+  if(!s.organismo.trim())m.push('El nombre del organismo (paso 1)');
+  if(!s.tipo)m.push('Si es plataforma nueva o mejora (paso 1)');
+  if(!s.problema.trim())m.push('El problema que quieren resolver (paso 2)');
+  if(!s.perfiles.some(p=>p.nombre.trim()))m.push('Al menos un perfil de usuario (paso 3)');
+  if(!s.hus.some(h=>h.quiero.trim()))m.push('Al menos una historia de usuario (paso 4)');
+  return m;
+}
+function review(){
+  const m=missing();
+  return head(8,'Revisá el resumen. Después copialo o descargalo y mandalo por mail a quien te compartió este cuestionario.')+
+   (m.length?`<div class="alert warn"><span class="ic" aria-hidden="true">!</span><div>Te faltan algunos datos clave. Podés mandarlo igual y lo completamos en la reunión.<ul>${m.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>`:
+     `<div class="alert ok"><span class="ic" aria-hidden="true">✓</span><span>Está todo lo importante. ¡Gracias! Con esto llegamos a la reunión con una buena base.</span></div>`)+
+   `<div class="actions"><button type="button" class="btn btn-c" id="copy">Copiar respuestas</button><button type="button" class="btn btn-o" id="dl" hidden>Descargar archivo .md</button></div>`+
+   `<div class="field"><label for="md">Resumen de tus respuestas</label><pre class="preview" id="md" tabindex="0">${esc(toMd())}</pre></div>`+
+   `<div><button type="button" class="btn btn-t danger" id="reset">Borrar respuestas y empezar de nuevo</button></div>`;
+}
+
+const val=v=>(v&&String(v).trim())||'—';
+const one=v=>String(v||'').replace(/\s*\n\s*/g,' ').replace(/\|/g,'/').trim()||'—';
+const LBL={nueva:'Plataforma nueva',mejora:'Mejora de una existente',nose:'No sé',si:'Sí',no:'No',pedir:'Hay que pedirlo'};
+function block(v){return (v&&String(v).trim())?String(v).trim():'—';}
+function toMd(){
+  const d=new Date().toLocaleDateString('es-AR');
+  const L=[];
+  L.push(`# Cuestionario previo · ${s.organismo.trim()||'Organismo sin nombre'}`);
+  L.push(`Respondido el ${d}`,'');
+  L.push('## Proyecto');
+  L.push(`- Organismo: ${val(s.organismo)}`,`- Área: ${val(s.area)}`,`- Referente: ${val(s.referente)}`,`- Contacto: ${val(s.contacto)}`);
+  L.push(`- Tipo: ${LBL[s.tipo]||'—'}${s.tipo==='mejora'&&s.plataforma?` (${s.plataforma.trim()})`:''}`);
+  L.push(`- Sistemas relacionados: ${s.sistemas.length?s.sistemas.join(', '):'—'}`);
+  L.push(`- Fecha que no se puede mover: ${s.fecha?new Date(s.fecha+'T12:00').toLocaleDateString('es-AR'):'—'}${s.fechaMotivo?` · ${s.fechaMotivo.trim()}`:''}`,'');
+  L.push('## Problema','',`**Qué quieren resolver:** ${block(s.problema)}`,'',`**Cómo se resuelve hoy:** ${block(s.hoy)}`,'',`**Qué pasa si no se resuelve:** ${block(s.siNo)}`,'');
+  L.push('## Perfiles de usuario','','| Perfil | Cantidad | Dispositivo | Conexión | Manejo digital | Notas |','| --- | --- | --- | --- | --- | --- |');
+  s.perfiles.filter(p=>Object.values(p).some(x=>String(x).trim())).forEach(p=>L.push(`| ${one(p.nombre)} | ${one(p.cantidad)} | ${one(p.dispositivo)} | ${one(p.conexion)} | ${one(p.manejo)} | ${one(p.notas)} |`));
+  L.push('','## Historias de usuario (borrador)','');
+  s.hus.filter(h=>Object.values(h).some(x=>String(x).trim())).forEach((h,i)=>{
+    const n=String(i+1).padStart(2,'0');
+    L.push(`### HU-${n} · ${one(h.quiero)}`);
+    L.push(`- Como: ${val(h.como)}`,`- Quiero: ${val(h.quiero)}`,`- Para: ${val(h.para)}`,`- Importancia: ${val(h.importancia)}`,`- Criterio de aceptación: ${one(h.criterio)}`,'');
+  });
+  L.push('## Qué cambia si funciona','',block(s.cambio),'');
+  const sen=s.senales.map(x=>x==='Otro'&&s.senalOtra.trim()?`Otro: ${s.senalOtra.trim()}`:x);
+  L.push(`**Cómo lo notarían:** ${sen.length?sen.join(', '):'—'}`,'');
+  L.push('## Datos y permisos','',`- Datos que se cargan o consultan: ${one(s.datos)}`,`- ¿Existen en una base?: ${LBL[s.base]||'—'}${s.base==='si'&&s.baseCual?` · ${one(s.baseCual)}`:''}`,`- ¿Tenemos acceso?: ${LBL[s.acceso]||'—'}`,`- Datos sensibles: ${s.sensibles.length?s.sensibles.join(', '):'—'}`,`- ¿Convenio, autorización o auditoría legal?: ${LBL[s.legal]||'—'}${s.legal==='si'&&s.legalDetalle?` · ${one(s.legalDetalle)}`:''}`,'');
+  if(s.tipo==='mejora'){
+    L.push('## Plataforma actual','',`- Qué funciona bien: ${one(s.bien)}`,`- Qué genera quejas: ${one(s.quejas)}`,`- Datos de uso o reclamos: ${one(s.uso)}`,`- Acceso a la plataforma: ${one(s.accesoActual)}`,'');
+  }
+  L.push('## Material','',`- Qué material tienen: ${one(s.material)}`,`- Carpeta compartida: ${one(s.carpeta)}`);
+  const links=String(s.links||'').split('\n').map(x=>x.trim()).filter(Boolean);
+  L.push(`- Links: ${links.length?'':'—'}`); links.forEach(l=>L.push(`  - ${l}`));
+  return L.join('\n');
+}
+
+function renderSteps(){
+  const done=i=>{
+    if(i===0)return !!(s.organismo.trim()&&s.tipo);
+    if(i===1)return !!s.problema.trim();
+    if(i===2)return s.perfiles.some(p=>p.nombre.trim());
+    if(i===3)return s.hus.some(h=>h.quiero.trim());
+    return false;
+  };
+  document.getElementById('steps').innerHTML=STEPS.map((st,i)=>`<button type="button" class="step${i===step?' cur':''}${done(i)?' done':''}${skip(i)?' skip':''}" data-go="${i}"${i===step?' aria-current="step"':''}${skip(i)?' title="Solo si es una mejora"':''}><span class="n">${i+1}</span><span class="lbl">${st.short}</span></button>`).join('');
+  const total=STEPS.filter((_,i)=>!skip(i)).length, pos=STEPS.slice(0,step+1).filter((_,i)=>!skip(i)).length;
+  document.getElementById('bar').style.width=Math.round(pos/total*100)+'%';
+  const cur=document.querySelector('.step.cur'); if(cur&&cur.scrollIntoView){try{cur.scrollIntoView({block:'nearest',inline:'nearest'})}catch(e){}}
+}
+function render(focus){
+  document.getElementById('card').innerHTML=R[step]();
+  renderSteps();
+  const prev=document.getElementById('prev'), next=document.getElementById('next');
+  prev.disabled=step===0; next.hidden=step===STEPS.length-1;
+  next.textContent=step===STEPS.length-2?'Ver resumen':'Siguiente';
+  if(step===STEPS.length-1)wireReview();
+  if(focus){const h=document.querySelector('#card h3'); if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});} document.getElementById('panel').scrollIntoView({behavior:'smooth',block:'start'});}
+  showSaved();
+}
+function go(i){
+  if(i<0||i>=STEPS.length)return;
+  const dir=i>step?1:-1; step=i;
+  while(skip(step)&&step>0&&step<STEPS.length-1)step+=dir;
+  render(true);
+}
+const card=document.getElementById('card');
+card.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.dataset.k){s[t.dataset.k]=t.value;save();if(t.dataset.k==='organismo'||t.dataset.k==='problema')renderSteps();}
+  else if(t.dataset.l){const it=s[t.dataset.l][+t.dataset.i]; it[t.dataset.f]=t.value; save();
+    if(t.dataset.l==='hus'){const sn=card.querySelector(`[data-sentence="${t.dataset.i}"]`); if(sn)sn.innerHTML=huSentence(it);}
+    renderSteps();}
+});
+card.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return;
+  if(b.dataset.radio){const k=b.dataset.radio; s[k]=s[k]===b.dataset.v?'':b.dataset.v; save(); render(false); return;}
+  if(b.dataset.lradio){const it=s[b.dataset.lradio][+b.dataset.i], f=b.dataset.f; it[f]=it[f]===b.dataset.v?'':b.dataset.v; save(); render(false); return;}
+  if(b.dataset.multi){const k=b.dataset.multi, v=b.dataset.v, arr=s[k]; const ix=arr.indexOf(v); if(ix>=0)arr.splice(ix,1); else arr.push(v); save(); render(false); return;}
+  if(b.dataset.add){const k=b.dataset.add; s[k].push(k==='perfiles'?{nombre:'',cantidad:'',dispositivo:'',conexion:'',manejo:'',notas:''}:{como:'',quiero:'',para:'',importancia:'',criterio:''}); save(); render(false);
+    const items=card.querySelectorAll('.item'); const last=items[items.length-1]; if(last){const inp=last.querySelector('input,textarea'); if(inp)inp.focus();} return;}
+  if(b.dataset.del){s[b.dataset.del].splice(+b.dataset.i,1); save(); render(false); return;}
+});
+document.getElementById('steps').addEventListener('click',e=>{const b=e.target.closest('[data-go]'); if(b)go(+b.dataset.go);});
+document.getElementById('prev').addEventListener('click',()=>go(step-1));
+document.getElementById('next').addEventListener('click',()=>go(step+1));
+
+function toast(msg){const t=document.getElementById('toast'); t.textContent=msg; t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>{t.hidden=true},3200);}
+let downloads={save:async({filename,data})=>{const u=URL.createObjectURL(data);const a=document.createElement('a');a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500);}};
+function wireReview(){
+  const copyBtn=document.getElementById('copy');
+  copyBtn.addEventListener('click',()=>{
+    const md=toMd();
+    const fallback=()=>{const pre=document.getElementById('md'); const r=document.createRange(); r.selectNodeContents(pre); const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r); toast('Texto seleccionado: copialo con Ctrl+C (o Cmd+C)');};
+    try{navigator.clipboard.writeText(md).then(()=>toast('Respuestas copiadas. Pegalas en un mail y mandalas.'),fallback);}catch(e){fallback();}
+  });
+  const dl=document.getElementById('dl');
+  if(downloads){dl.hidden=false;}
+  dl.addEventListener('click',async()=>{
+    if(!downloads)return;
+    const name='cuestionario-'+(s.organismo.trim()||'organismo').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60)+'.md';
+    try{await downloads.save({filename:name,data:new Blob([toMd()],{type:'text/markdown'})}); toast('Archivo guardado. Adjuntalo en un mail.');}
+    catch(err){ if(err&&err.code==='declined')return; if(err&&err.code==='rate_limited'){toast('Esperá un momento y probá de nuevo.');return;} dl.hidden=true; toast('No se pudo descargar acá. Usá “Copiar respuestas”.'); }
+  });
+  const reset=document.getElementById('reset'); let armed=false;
+  reset.addEventListener('click',()=>{
+    if(!armed){armed=true; reset.textContent='Tocá de nuevo para confirmar el borrado'; setTimeout(()=>{armed=false; if(document.body.contains(reset))reset.textContent='Borrar respuestas y empezar de nuevo';},4000); return;}
+    s=blank(); try{localStorage.removeItem(KEY);}catch(e){} savedAt=null; document.getElementById('saved').textContent=''; step=0; render(true); toast('Respuestas borradas.');
+  });
+}
+
+render(false);
+})();
+</script>
+
+</body>
+</html>
