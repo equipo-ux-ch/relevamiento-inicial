@@ -362,7 +362,6 @@ function renderSteps(){
   document.getElementById('steps').innerHTML=STEPS.map((st,i)=>`<button type="button" class="step${i===step?' cur':''}${done(i)?' done':''}${skip(i)?' skip':''}" data-go="${i}"${i===step?' aria-current="step"':''}${skip(i)?' title="Solo si es una mejora"':''}><span class="n">${i+1}</span><span class="lbl">${st.short}</span></button>`).join('');
   const total=STEPS.filter((_,i)=>!skip(i)).length, pos=STEPS.slice(0,step+1).filter((_,i)=>!skip(i)).length;
   document.getElementById('bar').style.width=Math.round(pos/total*100)+'%';
-  const cur=document.querySelector('.step.cur'); if(cur&&cur.scrollIntoView){try{cur.scrollIntoView({block:'nearest',inline:'nearest'})}catch(e){}}
 }
 function render(focus){
   document.getElementById('card').innerHTML=R[step]();
